@@ -1,0 +1,24 @@
+[package]
+authors = ["E <edgeworth.dev@gmail.com>"]
+categories = ["dsn", "specctra", "parsing", "pcb"]
+description = "dsn parsing library"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+name = "memedsn"
+repository = "https://github.com/Edgeworth/memedsn"
+version = "0.1.0"
+
+[dependencies]
+derive_more = "0.99.17"
+eyre = "0.6.7"
+memegeom = {version = "*", git = "https://github.com/Edgeworth/memegeom"}
+regex = "1.5.5"
+strum = {version = "0.24.0", features = ["derive"]}
+
+# Build dependencies with optimisations - debug builds will run faster
+# but dependencies don't change often.
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = true
