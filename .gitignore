@@ -1,0 +1,5 @@
+/target
+/.cargo
+data/
+.mypy_cache/
+__pycache__
