@@ -10,6 +10,7 @@ use strum::{Display as EnumDisplay, EnumString};
 
 // <unit_descriptor> = (unit <dimension_unit>)
 // <dimension_unit> = [inch | mil | cm | mm | um]
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnDimensionUnit {
@@ -34,6 +35,7 @@ pub type DsnId = String;
 pub type DsnLayerId = DsnId;
 
 // <rectangle_descriptor> = (rect <layer_id> <vertex> <vertex>)
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnRect {
     pub layer_id: DsnLayerId,
@@ -41,6 +43,7 @@ pub struct DsnRect {
 }
 
 // <circle_descriptor> = (circle <layer_id> <diameter> [<vertex>])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnCircle {
     pub layer_id: DsnLayerId,
@@ -50,6 +53,7 @@ pub struct DsnCircle {
 
 // <polygon_descriptor> = (polygon <layer_id> <aperture_width> {<vertex>}
 //    [(aperture_type [round | square])])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPolygon {
     pub layer_id: DsnLayerId,
@@ -59,6 +63,7 @@ pub struct DsnPolygon {
 
 // <path_descriptor> = (path <layer_id> <aperture_width> {<vertex>}
 //    [(aperture_type [round | square])])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPath {
     pub layer_id: DsnLayerId,
@@ -68,6 +73,7 @@ pub struct DsnPath {
 
 // <qarc_descriptor> = (qarc <layer_id> <aperture_width>
 //    <vertex> <vertex> <vertex>)
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnQArc {
     pub layer_id: DsnLayerId,
@@ -79,6 +85,7 @@ pub struct DsnQArc {
 
 // <shape_descriptor> = = [<rectangle_descriptor> | <circle_descriptor> |
 //    <polygon_descriptor> | <path_descriptor> | <qarc_descriptor>]
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnShape {
@@ -97,6 +104,7 @@ impl Default for DsnShape {
 
 // <window_descriptor> = (window <shape_descriptor>) - can only be rect or
 // polygon.
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnWindow {
@@ -111,6 +119,7 @@ impl Default for DsnWindow {
 }
 
 // <object_type> = [pin | smd | via | wire | area | testpoint]
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnObjectType {
@@ -123,6 +132,7 @@ pub enum DsnObjectType {
     TestPoint,
 }
 
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPadstackShape {
     pub shape: DsnShape,
@@ -137,6 +147,7 @@ pub struct DsnPadstackShape {
 //    [(absolute [on | off])] [(rule <clearance_descriptor>)])
 // A padstack describes an exposed area for connecting components to. Pins
 // connect onto padstacks. There are multiple PadstackShapes
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DsnPadstack {
     pub padstack_id: DsnId,
@@ -151,6 +162,7 @@ impl Default for DsnPadstack {
 }
 
 // Describes a side of the PCB.
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnSide {
@@ -170,6 +182,7 @@ impl Default for DsnSide {
 //    [<user_property_descriptor>])}
 // Describes a pin within an image (type of component). Pins connect onto
 // padstacks.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPin {
     pub padstack_id: DsnId, // Padstack describes the shape of the pin
@@ -181,6 +194,7 @@ pub struct DsnPin {
 // Keepout: No routing whatsoever.
 // ViaKeepout: No vias.
 // WireKeepout: No wires.
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnKeepoutType {
@@ -203,6 +217,7 @@ impl Default for DsnKeepoutType {
 //    [(place_rule <spacing_descriptor>)]
 //    [{<window_descriptor>}])
 // Describes an area where no routing can occur.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnKeepout {
     pub keepout_type: DsnKeepoutType,
@@ -222,6 +237,7 @@ pub struct DsnKeepout {
 //    [{<keepout_descriptor>}]
 //    [<image_property_descriptor>])
 // Describes a component type.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnImage {
     pub image_id: DsnId,
@@ -230,6 +246,7 @@ pub struct DsnImage {
     pub keepouts: Vec<DsnKeepout>,
 }
 
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnLockType {
@@ -255,6 +272,7 @@ impl Default for DsnLockType {
 //    [<rule_descriptor>> | <region_descriptor> | null]
 //    [(PN <part_number>)])
 // Describes the location of a component.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPlacementRef {
     pub component_id: DsnId,
@@ -269,6 +287,7 @@ pub struct DsnPlacementRef {
 // Describes instances of a component. The component type is determined
 // by the image referred to by |image_id|. There is a component at each
 // location specified by each placement reference.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnComponent {
     pub image_id: DsnId,
@@ -276,6 +295,7 @@ pub struct DsnComponent {
 }
 
 // <pin_reference> = <component_id>-<pin_id>
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPinRef {
     pub component_id: DsnId,
@@ -299,6 +319,7 @@ pub struct DsnPinRef {
 //    [(load {<pin_reference>})]
 //    [(terminator {<pin_reference>})]
 //    [(supply [power | ground])])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnNet {
     pub net_id: DsnId,
@@ -328,6 +349,7 @@ pub struct DsnNet {
 //    (use_via {[<padstack_id> |
 //        (use_array <via_array_template_id> [<row> <column>])]})]
 // Describes some rules about routing. Included within a class.
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub enum DsnCircuit {
     UseVia(DsnId), // Padstack id of via to use
@@ -336,6 +358,7 @@ pub enum DsnCircuit {
 // <clearance_type> = [<object_type>_<object_type> | smd_via_same_net |
 //    via_via_same_net | buried_via_gap [(layer_depth <positive_integer>)] |
 //    antipad_gap | pad_to_turn_gap | smd_to_turn_gap]
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub enum DsnClearanceType {
     All, // If unspecified, choose all.
@@ -345,6 +368,7 @@ pub enum DsnClearanceType {
     SmdSmd,
 }
 // <clearance_descriptor> = (clearance <positive_dimension> [(type {<clearance_type>})]
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnClearance {
     pub amount: f64,
@@ -392,6 +416,7 @@ pub struct DsnClearance {
 //    <via_at_smd_descriptor> |
 //    <via_pattern_descriptor> |
 //    <width_descriptor>]
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub enum DsnRule {
     Width(f64),
@@ -401,6 +426,7 @@ pub enum DsnRule {
 // <class_descriptor> = (class <class_id>
 //    {[{<net_id>} | {<composite_name_list>}]} [<circuit_descriptor>]
 //    [<rule_descriptor>] [{<layer_rule_descriptor>}] [<topology_descriptor>])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnClass {
     pub class_id: DsnId,
@@ -417,6 +443,7 @@ pub struct DsnClass {
 //    [{<group_set_descriptor>}]
 //    [{<pair_descriptor>}]
 //    [{<bundle_descriptor>}])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnNetwork {
     pub nets: Vec<DsnNet>,
@@ -433,6 +460,7 @@ pub struct DsnNetwork {
 //    [<extra_image_directory_descriptor>]
 //    [{<family_family_descriptor>}]
 //    [{<image_image_descriptor>}])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnLibrary {
     pub images: Vec<DsnImage>,
@@ -440,6 +468,7 @@ pub struct DsnLibrary {
 }
 
 // <layer_type> = [signal | power | mixed | jumper]
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnLayerType {
@@ -462,6 +491,7 @@ impl Default for DsnLayerType {
 //    [<rule_descriptor>]
 //    [(cost <cost_descriptor> [(type [length | way])])]
 //    [(use_net {<net_id>})])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnLayer {
     pub layer_name: DsnId,
@@ -471,6 +501,7 @@ pub struct DsnLayer {
 // <plane_descriptor> = (plane <net_id>
 //    <shape_descriptor>
 //    [{<window_descriptor>}])
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPlane {
     pub net_id: DsnId,
@@ -495,6 +526,7 @@ pub struct DsnPlane {
 //    <rule_descriptor>
 //    [<structure_place_rule_descriptor>]
 //    {<grid_descriptor>})
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnStructure {
     pub boundaries: Vec<DsnShape>,
@@ -510,6 +542,7 @@ pub struct DsnStructure {
 //    [<place_control_descriptor>]
 //    {<component_instance>})
 // Describes the location of components on the pcb.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPlacement {
     pub components: Vec<DsnComponent>,
@@ -519,6 +552,7 @@ pub struct DsnPlacement {
 // Everything is in the units specified by |dimension|, but the resolution
 // of numbers specified is limited by 1 / |amount|. That is, there are
 // |amount| divisions in |dimension|.
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DsnResolution {
     pub amount: i32,                 // Default value is 2540000.
@@ -531,6 +565,7 @@ impl Default for DsnResolution {
     }
 }
 
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnWireType {
@@ -540,6 +575,7 @@ pub enum DsnWireType {
     Protect,
 }
 
+#[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum DsnWireAttr {
@@ -562,6 +598,7 @@ pub enum DsnWireAttr {
 //        (terminal <object_type> [<pin_reference>]))]
 //    [(supply)])
 // Describes a trace. Traces may have any shape.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnWire {}
 
@@ -577,6 +614,7 @@ pub struct DsnWire {}
 // (virtual_pin
 //    <virtual_pin_name> <vertex> (net <net_id>))
 // Describes a via.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnVia {}
 
@@ -586,6 +624,7 @@ pub struct DsnVia {}
 //    [<test_points_descriptor>]
 //    {[<supply_pin_descriptor>]})
 // Describes pre-existing traces and vias on the PCB.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnWiring {
     pub wires: Vec<DsnWire>,
@@ -612,6 +651,7 @@ pub struct DsnWiring {
 //    [<wiring_descriptor>]
 //    [<color_descriptor>])
 // Describes an overall PCB.
+#[must_use]
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct DsnPcb {
     pub pcb_id: DsnId,

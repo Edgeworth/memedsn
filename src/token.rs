@@ -1,6 +1,7 @@
 use derive_more::Display;
 use strum::{Display as EnumDisplay, EnumString};
 
+#[must_use]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
 pub enum Tok {
@@ -79,7 +80,7 @@ pub enum Tok {
 }
 
 #[derive(Debug, Display, Clone, PartialEq, Eq, PartialOrd, Ord)]
-#[display(fmt = "Token({}:{})", tok, s)]
+#[display(fmt = "Token({tok}:{s})")]
 pub struct Token {
     pub tok: Tok,
     pub s: String,
