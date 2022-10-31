@@ -5,6 +5,7 @@ use regex::Regex;
 
 use crate::token::{Tok, Token};
 
+#[must_use]
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Lexer {
     data: Vec<char>,

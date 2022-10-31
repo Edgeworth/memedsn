@@ -14,6 +14,7 @@ use crate::types::{
     DsnResolution, DsnRule, DsnShape, DsnSide, DsnStructure, DsnVia, DsnWindow, DsnWire, DsnWiring,
 };
 
+#[must_use]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Parser {
     toks: Vec<Token>,
@@ -22,7 +23,6 @@ pub struct Parser {
 }
 
 impl Parser {
-    #[must_use]
     pub fn new(toks: &[Token]) -> Self {
         Self { toks: toks.to_vec(), idx: 0, pcb: DsnPcb::default() }
     }
