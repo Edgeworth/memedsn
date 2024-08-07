@@ -80,7 +80,7 @@ pub enum Tok {
 }
 
 #[derive(Debug, Display, Clone, PartialEq, Eq, PartialOrd, Ord)]
-#[display(fmt = "Token({tok}:{s})")]
+#[display("Token({tok}:{s})")]
 pub struct Token {
     pub tok: Tok,
     pub s: String,

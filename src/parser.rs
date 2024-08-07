@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use eyre::{eyre, Result};
+use eyre::{Result, eyre};
 use memegeom::primitive::point::Pt;
 use memegeom::primitive::pt;
 use memegeom::primitive::rect::Rt;

@@ -2,7 +2,7 @@
 authors = ["Eliot Courtney <edgeworth.dev@gmail.com>"]
 categories = ["parsing"]
 description = "dsn parsing library"
-edition = "2021"
+edition = "2024"
 keywords = ["dsn", "specctra", "parsing", "pcb"]
 license = "MIT OR Apache-2.0"
 name = "memedsn"
@@ -10,8 +10,8 @@ repository = "https://github.com/Edgeworth/memedsn"
 version = "0.1.0"
 
 [dependencies]
-derive_more = "0.99.17"
-eyre = "0.6.8"
+derive_more = {version = "2.0.1", features = ["display"]}
+eyre = "0.6.12"
 memegeom = {version = "0.1.0", git = "https://github.com/Edgeworth/memegeom"}
-regex = "1.8.1"
-strum = { version = "0.24.1", features = ["derive"] }
+regex = "1.11.1"
+strum = {version = "0.27.1", features = ["derive"]}

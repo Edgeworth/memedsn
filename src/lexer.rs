@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use eyre::{eyre, Result};
+use eyre::{Result, eyre};
 use regex::Regex;
 
 use crate::token::{Tok, Token};
