@@ -13,5 +13,5 @@ version = "0.1.0"
 derive_more = {version = "2.0.1", features = ["display"]}
 eyre = "0.6.12"
 memegeom = {version = "0.1.0", git = "https://github.com/Edgeworth/memegeom"}
-regex = "1.11.1"
-strum = {version = "0.27.1", features = ["derive"]}
+regex = "1.11.2"
+strum = {version = "0.27.2", features = ["derive"]}
