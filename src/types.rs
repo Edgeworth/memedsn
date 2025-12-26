@@ -13,18 +13,14 @@ use strum::{Display as EnumDisplay, EnumString};
 #[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
+#[derive(Default)]
 pub enum DsnDimensionUnit {
+    #[default]
     Inch,
     Mil,
     Cm,
     Mm,
     Um,
-}
-
-impl Default for DsnDimensionUnit {
-    fn default() -> Self {
-        Self::Inch
-    }
 }
 
 // <id>, <component_id>, <pin_id>, <padstack_id>, <via_id>, <image_id>,
@@ -165,16 +161,12 @@ impl Default for DsnPadstack {
 #[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
+#[derive(Default)]
 pub enum DsnSide {
+    #[default]
     Front,
     Back,
     Both,
-}
-
-impl Default for DsnSide {
-    fn default() -> Self {
-        Self::Front
-    }
 }
 
 // {(pin <padstack_id> [(rotate <rotation>)]
@@ -197,16 +189,12 @@ pub struct DsnPin {
 #[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
+#[derive(Default)]
 pub enum DsnKeepoutType {
+    #[default]
     Keepout,
     ViaKeepout,
     WireKeepout,
-}
-
-impl Default for DsnKeepoutType {
-    fn default() -> Self {
-        Self::Keepout
-    }
 }
 
 // <keepout_descriptor> = (
@@ -249,16 +237,12 @@ pub struct DsnImage {
 #[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
+#[derive(Default)]
 pub enum DsnLockType {
+    #[default]
     None,
     Position,
     Gate,
-}
-
-impl Default for DsnLockType {
-    fn default() -> Self {
-        Self::None
-    }
 }
 
 // <placement_reference> = (place <component_id>
@@ -471,17 +455,13 @@ pub struct DsnLibrary {
 #[must_use]
 #[derive(Debug, Clone, PartialEq, EnumString, EnumDisplay)]
 #[strum(serialize_all = "snake_case")]
+#[derive(Default)]
 pub enum DsnLayerType {
+    #[default]
     Signal,
     Power,
     Mixed,
     Jumper,
-}
-
-impl Default for DsnLayerType {
-    fn default() -> Self {
-        Self::Signal
-    }
 }
 
 // <layer_descriptor> = (layer <layer_name>
