@@ -9,7 +9,7 @@ fn parse_dsn(data: &str) -> Result<DsnPcb> {
 }
 
 #[test]
-fn test_complex_pcb_smoke() -> Result<()> {
+fn complex_pcb_smoke() -> Result<()> {
     let data = r"
         (pcb test_board
             (resolution mm 1000)
@@ -36,7 +36,7 @@ fn test_complex_pcb_smoke() -> Result<()> {
 }
 
 #[test]
-fn test_parser_directive_with_quotes_and_spaces() -> Result<()> {
+fn parser_directive_with_quotes_and_spaces() -> Result<()> {
     let data = r#"
         (pcb directive_test
             (parser
@@ -58,7 +58,7 @@ fn test_parser_directive_with_quotes_and_spaces() -> Result<()> {
 }
 
 #[test]
-fn test_parser_directive_space_in_quoted_tokens_off_without_quotes() -> Result<()> {
+fn parser_directive_space_in_quoted_tokens_off_without_quotes() -> Result<()> {
     let data = r"
         (pcb directive_test
             (parser

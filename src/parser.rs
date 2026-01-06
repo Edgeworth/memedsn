@@ -2,8 +2,7 @@ use std::str::FromStr;
 
 use eyre::{Result, eyre};
 use memegeom::primitive::point::Pt;
-use memegeom::primitive::pt;
-use memegeom::primitive::rect::Rt;
+use memegeom::primitive::{Rt, pt};
 
 use crate::token::{Tok, Token};
 use crate::types::{
@@ -682,7 +681,7 @@ mod tests {
     }
 
     #[test]
-    fn test_minimal_pcb() -> Result<()> {
+    fn minimal_pcb() -> Result<()> {
         let data = "(pcb test)";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.pcb_id, "test");
@@ -690,7 +689,7 @@ mod tests {
     }
 
     #[test]
-    fn test_pcb_with_resolution() -> Result<()> {
+    fn pcb_with_resolution() -> Result<()> {
         let data = "(pcb test (resolution mm 1000))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.pcb_id, "test");
@@ -700,7 +699,7 @@ mod tests {
     }
 
     #[test]
-    fn test_pcb_with_unit() -> Result<()> {
+    fn pcb_with_unit() -> Result<()> {
         let data = "(pcb test (unit mm))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.unit.dimension, DsnDimensionUnit::Mm);
@@ -708,7 +707,7 @@ mod tests {
     }
 
     #[test]
-    fn test_library_with_padstack() -> Result<()> {
+    fn library_with_padstack() -> Result<()> {
         let data = "(pcb test (library (padstack pad1 (attach off))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.padstacks.len(), 1);
@@ -718,7 +717,7 @@ mod tests {
     }
 
     #[test]
-    fn test_library_with_padstack_attach_on() -> Result<()> {
+    fn library_with_padstack_attach_on() -> Result<()> {
         let data = "(pcb test (library (padstack pad1 (attach on))))";
         let pcb = parse_dsn(data)?;
         assert!(pcb.library.padstacks[0].attach);
@@ -726,7 +725,7 @@ mod tests {
     }
 
     #[test]
-    fn test_library_with_image() -> Result<()> {
+    fn library_with_image() -> Result<()> {
         let data = "(pcb test (library (image img1)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images.len(), 1);
@@ -735,7 +734,7 @@ mod tests {
     }
 
     #[test]
-    fn test_image_with_pin() -> Result<()> {
+    fn image_with_pin() -> Result<()> {
         let data = "(pcb test (library (image img1 (pin pad1 1 10.0 20.0))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images[0].pins.len(), 1);
@@ -745,7 +744,7 @@ mod tests {
     }
 
     #[test]
-    fn test_image_with_pin_rotation() -> Result<()> {
+    fn image_with_pin_rotation() -> Result<()> {
         let data = "(pcb test (library (image img1 (pin pad1 (rotate 90.0) 1 10.0 20.0))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images[0].pins[0].rotation, 90.0);
@@ -753,7 +752,7 @@ mod tests {
     }
 
     #[test]
-    fn test_network_with_net() -> Result<()> {
+    fn network_with_net() -> Result<()> {
         let data = "(pcb test (network (net net1)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.nets.len(), 1);
@@ -762,7 +761,7 @@ mod tests {
     }
 
     #[test]
-    fn test_net_with_pins() -> Result<()> {
+    fn net_with_pins() -> Result<()> {
         let data = "(pcb test (network (net net1 (pins R1-1 R2-2))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.nets[0].pins.len(), 2);
@@ -774,7 +773,7 @@ mod tests {
     }
 
     #[test]
-    fn test_network_with_class() -> Result<()> {
+    fn network_with_class() -> Result<()> {
         let data = "(pcb test (network (class power GND VCC)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.classes.len(), 1);
@@ -786,7 +785,7 @@ mod tests {
     }
 
     #[test]
-    fn test_class_with_circuit() -> Result<()> {
+    fn class_with_circuit() -> Result<()> {
         let data = "(pcb test (network (class signal (circuit (use_via via1)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.classes[0].circuits.len(), 1);
@@ -797,7 +796,7 @@ mod tests {
     }
 
     #[test]
-    fn test_class_with_rule_width() -> Result<()> {
+    fn class_with_rule_width() -> Result<()> {
         let data = "(pcb test (network (class signal (rule (width 0.5)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.classes[0].rules.len(), 1);
@@ -809,7 +808,7 @@ mod tests {
     }
 
     #[test]
-    fn test_class_with_rule_clearance() -> Result<()> {
+    fn class_with_rule_clearance() -> Result<()> {
         let data = "(pcb test (network (class signal (rule (clearance 0.3)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.classes[0].rules.len(), 1);
@@ -828,7 +827,7 @@ mod tests {
     }
 
     #[test]
-    fn test_clearance_with_type() -> Result<()> {
+    fn clearance_with_type() -> Result<()> {
         let data = "(pcb test (network (class signal (rule (clearance 0.3 (type smd_smd))))))";
         let pcb = parse_dsn(data)?;
         match &pcb.network.classes[0].rules[0] {
@@ -845,7 +844,7 @@ mod tests {
     }
 
     #[test]
-    fn test_placement_with_component() -> Result<()> {
+    fn placement_with_component() -> Result<()> {
         let data = "(pcb test (placement (component img1)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.placement.components.len(), 1);
@@ -854,7 +853,7 @@ mod tests {
     }
 
     #[test]
-    fn test_component_with_place() -> Result<()> {
+    fn component_with_place() -> Result<()> {
         let data = "(pcb test (placement (component img1 (place R1 10.0 20.0 front 0.0))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.placement.components[0].refs.len(), 1);
@@ -865,7 +864,7 @@ mod tests {
     }
 
     #[test]
-    fn test_place_with_lock_type() -> Result<()> {
+    fn place_with_lock_type() -> Result<()> {
         let data = "(pcb test (placement (component img1 (place R1 10.0 20.0 front 0.0 (lock_type position)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.placement.components[0].refs[0].lock_type, DsnLockType::Position);
@@ -873,7 +872,7 @@ mod tests {
     }
 
     #[test]
-    fn test_place_with_part_number() -> Result<()> {
+    fn place_with_part_number() -> Result<()> {
         let data =
             "(pcb test (placement (component img1 (place R1 10.0 20.0 front 0.0 (pn 1234)))))";
         let pcb = parse_dsn(data)?;
@@ -882,7 +881,7 @@ mod tests {
     }
 
     #[test]
-    fn test_layer_types() -> Result<()> {
+    fn layer_types() -> Result<()> {
         let data = "(pcb test (structure (layer L1 (type signal)) (layer L2 (type power)) (layer L3 (type mixed)) (layer L4 (type jumper))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.layers.len(), 4);
@@ -898,7 +897,7 @@ mod tests {
     }
 
     #[test]
-    fn test_structure_with_via() -> Result<()> {
+    fn structure_with_via() -> Result<()> {
         let data = "(pcb test (structure (via via1 via2)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.vias.len(), 2);
@@ -908,7 +907,7 @@ mod tests {
     }
 
     #[test]
-    fn test_rect_shape() -> Result<()> {
+    fn rect_shape() -> Result<()> {
         let data = "(pcb test (structure (boundary (rect Top 0 0 100 100))))";
         let pcb = parse_dsn(data)?;
         match &pcb.structure.boundaries[0] {
@@ -921,7 +920,7 @@ mod tests {
     }
 
     #[test]
-    fn test_circle_shape() -> Result<()> {
+    fn circle_shape() -> Result<()> {
         let data = "(pcb test (library (padstack pad1 (shape (circle Top 10.0)))))";
         let pcb = parse_dsn(data)?;
         match &pcb.library.padstacks[0].shapes[0].shape {
@@ -935,7 +934,7 @@ mod tests {
     }
 
     #[test]
-    fn test_circle_shape_with_position() -> Result<()> {
+    fn circle_shape_with_position() -> Result<()> {
         let data = "(pcb test (library (padstack pad1 (shape (circle Top 10.0 5.0 5.0)))))";
         let pcb = parse_dsn(data)?;
         match &pcb.library.padstacks[0].shapes[0].shape {
@@ -949,7 +948,7 @@ mod tests {
     }
 
     #[test]
-    fn test_polygon_shape() -> Result<()> {
+    fn polygon_shape() -> Result<()> {
         let data = "(pcb test (structure (boundary (polygon Top 1.0 0 0 10 0 10 10 0 10))))";
         let pcb = parse_dsn(data)?;
         match &pcb.structure.boundaries[0] {
@@ -964,7 +963,7 @@ mod tests {
     }
 
     #[test]
-    fn test_path_shape() -> Result<()> {
+    fn path_shape() -> Result<()> {
         let data = "(pcb test (structure (boundary (path Top 1.0 0 0 10 10 20 20))))";
         let pcb = parse_dsn(data)?;
         match &pcb.structure.boundaries[0] {
@@ -979,7 +978,7 @@ mod tests {
     }
 
     #[test]
-    fn test_qarc_shape() -> Result<()> {
+    fn qarc_shape() -> Result<()> {
         let data = "(pcb test (structure (boundary (qarc Top 1.0 0 0 10 10 5 5))))";
         let pcb = parse_dsn(data)?;
         match &pcb.structure.boundaries[0] {
@@ -996,7 +995,7 @@ mod tests {
     }
 
     #[test]
-    fn test_keepout() -> Result<()> {
+    fn keepout() -> Result<()> {
         let data = "(pcb test (structure (keepout (rect Top 0 0 10 10))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.keepouts.len(), 1);
@@ -1005,7 +1004,7 @@ mod tests {
     }
 
     #[test]
-    fn test_via_keepout() -> Result<()> {
+    fn via_keepout() -> Result<()> {
         let data = "(pcb test (structure (via_keepout (rect Top 0 0 10 10))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.keepouts[0].keepout_type, DsnKeepoutType::ViaKeepout);
@@ -1013,7 +1012,7 @@ mod tests {
     }
 
     #[test]
-    fn test_wire_keepout() -> Result<()> {
+    fn wire_keepout() -> Result<()> {
         let data = "(pcb test (structure (wire_keepout (rect Top 0 0 10 10))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.keepouts[0].keepout_type, DsnKeepoutType::WireKeepout);
@@ -1021,7 +1020,7 @@ mod tests {
     }
 
     #[test]
-    fn test_image_with_keepout() -> Result<()> {
+    fn image_with_keepout() -> Result<()> {
         let data = "(pcb test (library (image img1 (keepout (rect Top 0 0 10 10)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images[0].keepouts.len(), 1);
@@ -1029,7 +1028,7 @@ mod tests {
     }
 
     #[test]
-    fn test_image_with_outline() -> Result<()> {
+    fn image_with_outline() -> Result<()> {
         let data = "(pcb test (library (image img1 (outline (rect Top 0 0 10 10)))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images[0].outlines.len(), 1);
@@ -1037,7 +1036,7 @@ mod tests {
     }
 
     #[test]
-    fn test_negative_numbers() -> Result<()> {
+    fn negative_numbers() -> Result<()> {
         let data = "(pcb test (placement (component img1 (place R1 -10.5 -20.3 front 0.0))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.placement.components[0].refs[0].p.x, -10.5);
@@ -1046,7 +1045,7 @@ mod tests {
     }
 
     #[test]
-    fn test_decimal_numbers() -> Result<()> {
+    fn decimal_numbers() -> Result<()> {
         let data = "(pcb test (resolution mm 1000) (network (class signal (rule (width 0.254)))))";
         let pcb = parse_dsn(data)?;
         match &pcb.network.classes[0].rules[0] {
@@ -1057,7 +1056,7 @@ mod tests {
     }
 
     #[test]
-    fn test_multiple_boundaries() -> Result<()> {
+    fn multiple_boundaries() -> Result<()> {
         let data =
             "(pcb test (structure (boundary (rect Top 0 0 100 100)) (boundary (circle Top 10))))";
         let pcb = parse_dsn(data)?;
@@ -1066,7 +1065,7 @@ mod tests {
     }
 
     #[test]
-    fn test_multiple_rules() -> Result<()> {
+    fn multiple_rules() -> Result<()> {
         let data = "(pcb test (structure (rule (width 0.5) (clearance 0.3))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.rules.len(), 2);
@@ -1074,7 +1073,7 @@ mod tests {
     }
 
     #[test]
-    fn test_padstack_with_multiple_shapes() -> Result<()> {
+    fn padstack_with_multiple_shapes() -> Result<()> {
         let data = r"
             (pcb test (library (padstack pad1
                 (shape (circle Top 10.0))
@@ -1087,49 +1086,49 @@ mod tests {
     }
 
     #[test]
-    fn test_error_empty_polygon() {
+    fn error_empty_polygon() {
         let data = "(pcb test (structure (boundary (polygon Top 1.0))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_polygon_insufficient_points() {
+    fn error_polygon_insufficient_points() {
         let data = "(pcb test (structure (boundary (polygon Top 1.0 0 0 10 10))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_empty_path() {
+    fn error_empty_path() {
         let data = "(pcb test (structure (boundary (path Top 1.0))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_path_insufficient_points() {
+    fn error_path_insufficient_points() {
         let data = "(pcb test (structure (boundary (path Top 1.0 0 0))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_on_unexpected_token() {
+    fn error_on_unexpected_token() {
         let data = "(pcb test (unknown_keyword))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_on_missing_rparen() {
+    fn error_on_missing_rparen() {
         let data = "(pcb test";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_on_unexpected_eof() {
+    fn error_on_unexpected_eof() {
         let data = "(pcb test (library";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_side_variants() -> Result<()> {
+    fn side_variants() -> Result<()> {
         let data_front = "(pcb test (placement (component img1 (place R1 0 0 front 0))))";
         let data_back = "(pcb test (placement (component img1 (place R1 0 0 back 0))))";
         let data_both = "(pcb test (placement (component img1 (place R1 0 0 both 0))))";
@@ -1145,7 +1144,7 @@ mod tests {
     }
 
     #[test]
-    fn test_lock_type_gate() -> Result<()> {
+    fn lock_type_gate() -> Result<()> {
         let data =
             "(pcb test (placement (component img1 (place R1 0 0 front 0 (lock_type gate)))))";
         let pcb = parse_dsn(data)?;
@@ -1154,7 +1153,7 @@ mod tests {
     }
 
     #[test]
-    fn test_all_dimension_units() -> Result<()> {
+    fn all_dimension_units() -> Result<()> {
         let data_inch = "(pcb test (resolution inch 1000))";
         let data_mil = "(pcb test (resolution mil 1000))";
         let data_cm = "(pcb test (resolution cm 1000))";
@@ -1170,7 +1169,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parser_directive_ignored() -> Result<()> {
+    fn parser_directive_ignored() -> Result<()> {
         let data = "(pcb test (parser (host_cad freeroute)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.pcb_id, "test");
@@ -1178,7 +1177,7 @@ mod tests {
     }
 
     #[test]
-    fn test_layer_with_property_ignored() -> Result<()> {
+    fn layer_with_property_ignored() -> Result<()> {
         let data = "(pcb test (structure (layer Top (type signal) (property user_value 123))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.structure.layers[0].layer_name, "Top");
@@ -1186,7 +1185,7 @@ mod tests {
     }
 
     #[test]
-    fn test_clearance_with_default_smd() -> Result<()> {
+    fn clearance_with_default_smd() -> Result<()> {
         let data = "(pcb test (network (class signal (rule (clearance 0.3 (type default_smd))))))";
         let pcb = parse_dsn(data)?;
         match &pcb.network.classes[0].rules[0] {
@@ -1203,7 +1202,7 @@ mod tests {
     }
 
     #[test]
-    fn test_clearance_with_multiple_types() -> Result<()> {
+    fn clearance_with_multiple_types() -> Result<()> {
         let data = "(pcb test (network (class signal (rule (clearance 0.3 (type default_smd) (type smd_smd))))))";
         let pcb = parse_dsn(data)?;
         match &pcb.network.classes[0].rules[0] {
@@ -1216,37 +1215,37 @@ mod tests {
     }
 
     #[test]
-    fn test_error_invalid_dimension_unit() {
+    fn error_invalid_dimension_unit() {
         let data = "(pcb test (resolution invalid 1000))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_invalid_layer_type() {
+    fn error_invalid_layer_type() {
         let data = "(pcb test (structure (layer Top (type invalid))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_invalid_side() {
+    fn error_invalid_side() {
         let data = "(pcb test (placement (component img1 (place R1 0 0 invalid 0))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_invalid_number() {
+    fn error_invalid_number() {
         let data = "(pcb test (resolution mm notanumber))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_error_missing_required_field() {
+    fn error_missing_required_field() {
         let data = "(pcb test (resolution))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_pin_reference_parsing() -> Result<()> {
+    fn pin_reference_parsing() -> Result<()> {
         let data = "(pcb test (network (net GND (pins R1-1 C2-2 U3-10 R-A-1 U-1-2))))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.nets[0].pins.len(), 5);
@@ -1260,13 +1259,13 @@ mod tests {
     }
 
     #[test]
-    fn test_error_invalid_pin_reference() {
+    fn error_invalid_pin_reference() {
         let data = "(pcb test (network (net GND (pins R1_invalid))))";
         assert!(parse_dsn(data).is_err());
     }
 
     #[test]
-    fn test_multiple_images_in_library() -> Result<()> {
+    fn multiple_images_in_library() -> Result<()> {
         let data = "(pcb test (library (image img1) (image img2) (image img3)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.library.images.len(), 3);
@@ -1274,7 +1273,7 @@ mod tests {
     }
 
     #[test]
-    fn test_multiple_nets_in_network() -> Result<()> {
+    fn multiple_nets_in_network() -> Result<()> {
         let data = "(pcb test (network (net GND) (net VCC) (net DATA)))";
         let pcb = parse_dsn(data)?;
         assert_eq!(pcb.network.nets.len(), 3);
@@ -1282,7 +1281,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_sections() -> Result<()> {
+    fn empty_sections() -> Result<()> {
         let data = "(pcb test (library) (network) (placement) (wiring))";
         let pcb = parse_dsn(data)?;
         assert!(pcb.library.images.is_empty());

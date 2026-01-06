@@ -114,7 +114,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_simple_tokens() -> Result<()> {
+    fn simple_tokens() -> Result<()> {
         let data = "(pcb test)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens.len(), 4);
@@ -127,7 +127,7 @@ mod tests {
     }
 
     #[test]
-    fn test_nested_expressions() -> Result<()> {
+    fn nested_expressions() -> Result<()> {
         let data = "(pcb (net test))";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens.len(), 7);
@@ -143,7 +143,7 @@ mod tests {
     }
 
     #[test]
-    fn test_whitespace_handling() -> Result<()> {
+    fn whitespace_handling() -> Result<()> {
         let data = "  (  pcb   test  )  ";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens.len(), 4);
@@ -156,7 +156,7 @@ mod tests {
     }
 
     #[test]
-    fn test_string_quote_double() -> Result<()> {
+    fn string_quote_double() -> Result<()> {
         let data = r#"(string_quote ") (net "test name")"#;
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -166,7 +166,7 @@ mod tests {
     }
 
     #[test]
-    fn test_quoted_keyword_is_literal() -> Result<()> {
+    fn quoted_keyword_is_literal() -> Result<()> {
         let data = r#"(string_quote ") (net "pcb")"#;
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -176,7 +176,7 @@ mod tests {
     }
 
     #[test]
-    fn test_space_in_quoted_tokens_off() -> Result<()> {
+    fn space_in_quoted_tokens_off() -> Result<()> {
         let data = r#"(string_quote ") (space_in_quoted_tokens off) (net "ab")"#;
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -186,7 +186,7 @@ mod tests {
     }
 
     #[test]
-    fn test_space_in_quoted_tokens_off_spaces() -> Result<()> {
+    fn space_in_quoted_tokens_off_spaces() -> Result<()> {
         let data = r#"(string_quote ") (space_in_quoted_tokens off) (net "a b")"#;
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -198,7 +198,7 @@ mod tests {
     }
 
     #[test]
-    fn test_string_quote_single() -> Result<()> {
+    fn string_quote_single() -> Result<()> {
         let data = "(string_quote ') (net 'test name')";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -208,7 +208,7 @@ mod tests {
     }
 
     #[test]
-    fn test_string_quote_dollar() -> Result<()> {
+    fn string_quote_dollar() -> Result<()> {
         let data = "(string_quote $) (net $test name$)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Net);
@@ -218,7 +218,7 @@ mod tests {
     }
 
     #[test]
-    fn test_unclosed_quoted_string_errors() -> Result<()> {
+    fn unclosed_quoted_string_errors() -> Result<()> {
         let data = r#"(string_quote ") (pcb "unclosed string)"#;
         let lexer = Lexer::new(data)?;
         assert!(lexer.lex().is_err());
@@ -226,7 +226,7 @@ mod tests {
     }
 
     #[test]
-    fn test_empty_input() -> Result<()> {
+    fn empty_input() -> Result<()> {
         let data = "";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens.len(), 0);
@@ -234,7 +234,7 @@ mod tests {
     }
 
     #[test]
-    fn test_only_whitespace() -> Result<()> {
+    fn only_whitespace() -> Result<()> {
         let data = "   \n\t  ";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens.len(), 0);
@@ -242,7 +242,7 @@ mod tests {
     }
 
     #[test]
-    fn test_case_insensitive_keywords() -> Result<()> {
+    fn case_insensitive_keywords() -> Result<()> {
         let data = "(PCB NET VIA)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Pcb);
@@ -252,7 +252,7 @@ mod tests {
     }
 
     #[test]
-    fn test_negative_numbers() -> Result<()> {
+    fn negative_numbers() -> Result<()> {
         let data = "(vertex -10.5 -20.3)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Literal);
@@ -265,7 +265,7 @@ mod tests {
     }
 
     #[test]
-    fn test_identifiers_with_underscores() -> Result<()> {
+    fn identifiers_with_underscores() -> Result<()> {
         let data = "(net my_net_name_123)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[2].tok, Tok::Literal);
@@ -274,7 +274,7 @@ mod tests {
     }
 
     #[test]
-    fn test_identifiers_with_dashes() -> Result<()> {
+    fn identifiers_with_dashes() -> Result<()> {
         let data = "(component R1-123-test)";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[2].tok, Tok::Literal);
@@ -283,7 +283,7 @@ mod tests {
     }
 
     #[test]
-    fn test_real_pcb_snippet() -> Result<()> {
+    fn real_pcb_snippet() -> Result<()> {
         let data = "(pcb test_board (resolution mm 1000))";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[0].tok, Tok::Lparen);
@@ -299,7 +299,7 @@ mod tests {
     }
 
     #[test]
-    fn test_multiline_input() -> Result<()> {
+    fn multiline_input() -> Result<()> {
         let data = "(pcb test\n  (net mynet)\n  (via v1))";
         let tokens = Lexer::new(data)?.lex()?;
         assert_eq!(tokens[1].tok, Tok::Pcb);
@@ -315,7 +315,7 @@ mod tests {
     }
 
     #[test]
-    fn test_quoted_empty_string() -> Result<()> {
+    fn quoted_empty_string() -> Result<()> {
         let data = r#"(string_quote ") (net "")"#;
         let tokens = Lexer::new(data)?.lex()?;
         let net_idx = tokens
@@ -327,7 +327,7 @@ mod tests {
     }
 
     #[test]
-    fn test_invalid_quote_character() {
+    fn invalid_quote_character() {
         let data = r"(string_quote x) (pcb test)";
         assert!(Lexer::new(data).is_err());
     }

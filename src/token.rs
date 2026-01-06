@@ -95,7 +95,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_tok_from_str_case_sensitive() -> Result<()> {
+    fn tok_from_str_case_sensitive() -> Result<()> {
         // Tok::from_str is case-sensitive and expects snake_case
         // The lexer handles case-insensitivity by converting to lowercase first
         assert_eq!(Tok::from_str("area")?, Tok::Area);
@@ -108,14 +108,14 @@ mod tests {
     }
 
     #[test]
-    fn test_tok_from_str_invalid() {
+    fn tok_from_str_invalid() {
         assert!(Tok::from_str("invalid_keyword").is_err());
         assert!(Tok::from_str("notakeyword").is_err());
         assert!(Tok::from_str("").is_err());
     }
 
     #[test]
-    fn test_token_display() {
+    fn token_display() {
         let token = Token { tok: Tok::Area, s: "area".to_string() };
         assert_eq!(token.to_string(), "Token(area:area)");
 
